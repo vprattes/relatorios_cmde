@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relatórios CMDE</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--papel:#F7F8F5;--superficie:#FFFFFF;--tinta:#1C2A2B;--suave:#5B6B6B;--linha:#D9E0DB;--acento:#0E6B57;--acento-fundo:#E2F0EA;
+  --f-titulo:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--f-texto:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;--f-dado:"IBM Plex Mono",ui-monospace,Consolas,monospace}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--papel:#131A1B;--superficie:#1A2324;--tinta:#E3EAE7;--suave:#9BABA8;--linha:#2D3A3B;--acento:#5CC4A6;--acento-fundo:#15322B;color-scheme:dark}}
+:root[data-theme="dark"]{--papel:#131A1B;--superficie:#1A2324;--tinta:#E3EAE7;--suave:#9BABA8;--linha:#2D3A3B;--acento:#5CC4A6;--acento-fundo:#15322B;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--papel);color:var(--tinta);font-family:var(--f-texto);font-size:16px;line-height:1.55;margin:0;padding-inline:16px;padding-block:40px 64px}
+main{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1,h2{font-family:var(--f-titulo);margin:0;line-height:1.2;text-wrap:balance}
+h1{font-size:clamp(28px,5vw,40px)}
+p{margin:0;max-width:64ch;color:var(--suave)}
+.rotulo{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--suave);font-weight:700}
+header{display:flex;flex-direction:column;gap:10px;border-bottom:3px solid var(--tinta);padding-bottom:20px}
+ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+a.rel{display:grid;grid-template-columns:1fr auto;gap:6px 16px;background:var(--superficie);border:1px solid var(--linha);border-radius:10px;padding:16px 18px;color:var(--tinta);text-decoration:none}
+a.rel:hover,a.rel:focus-visible{border-color:var(--acento);outline:none;box-shadow:0 0 0 3px var(--acento-fundo)}
+a.rel h2{font-size:19px}
+a.rel .data{font-family:var(--f-dado);font-size:13px;color:var(--suave);white-space:nowrap}
+a.rel p{grid-column:1/-1;font-size:14.5px}
+footer{font-size:13px;color:var(--suave);border-top:1px solid var(--linha);padding-top:12px}
+</style></head>
+<body><main>
+<header>
+  <span class="rotulo">CMDE · integração SERE → SGP · rede estadual do Paraná</span>
+  <h1>Relatórios</h1>
+  <p>Documentos de regras, fluxos e acompanhamento da integração com o Sistema Gestão Presente. Sem dados pessoais: identificadores aparecem parcialmente ocultos.</p>
+</header>
+<ul>
+  <li><a class="rel" href="fluxos-matricula-estadual/">
+    <h2>Fluxos de matrícula e movimentação: SERE → SGP</h2><span class="data">05/11/2026 · v1.0</span>
+    <p>15 regras gerais, o de-para de situação e motivo e 28 situações com exemplos reais, volumes de 2026, fluxogramas, pontos para decisão e termo de ciência.</p>
+  </a></li>
+</ul>
+<footer>Mantido pela equipe CMDE. Cada relatório traz a data e a base de dados usada.</footer>
+</main></body></html>

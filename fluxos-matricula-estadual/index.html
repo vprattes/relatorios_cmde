@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fluxos de Matrícula SERE → SGP</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Documento normativo: coluna de leitura, regras numeradas (a numeração é referência real para assinatura), fichas de fluxo com exemplo real e resultado esperado no SGP. */
+:root{
+  --papel:#F7F8F5; --superficie:#FFFFFF; --tinta:#1C2A2B; --suave:#5B6B6B; --linha:#D9E0DB;
+  --acento:#0E6B57; --acento-fundo:#E2F0EA; --alerta:#9A5B13; --alerta-fundo:#FBF0E1;
+  --erro:#A23B2A; --erro-fundo:#F8E6E2; --info:#3E5C8A; --info-fundo:#E7EDF7; --placa:#FFFFFF;
+  --f-titulo:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-texto:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --f-dado:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --papel:#131A1B; --superficie:#1A2324; --tinta:#E3EAE7; --suave:#9BABA8; --linha:#2D3A3B;
+  --acento:#5CC4A6; --acento-fundo:#15322B; --alerta:#E5A85A; --alerta-fundo:#33270F;
+  --erro:#EE8B78; --erro-fundo:#3A1E19; --info:#8FB0E3; --info-fundo:#1C2638; --placa:#F2F5F1; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --papel:#131A1B; --superficie:#1A2324; --tinta:#E3EAE7; --suave:#9BABA8; --linha:#2D3A3B;
+  --acento:#5CC4A6; --acento-fundo:#15322B; --alerta:#E5A85A; --alerta-fundo:#33270F;
+  --erro:#EE8B78; --erro-fundo:#3A1E19; --info:#8FB0E3; --info-fundo:#1C2638; --placa:#F2F5F1; color-scheme:dark}
+@page{size:A4;margin:15mm 13mm}
+*{box-sizing:border-box}
+body{background:var(--papel);color:var(--tinta);font-family:var(--f-texto);font-size:15px;line-height:1.55;margin:0;padding-inline:16px;padding-block:28px 56px}
+main{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:34px}
+h1,h2,h3,h4{font-family:var(--f-titulo);margin:0;line-height:1.2;text-wrap:balance}
+h1{font-size:clamp(28px,4.2vw,38px)}
+h2{font-size:23px;border-bottom:2px solid var(--tinta);padding-bottom:6px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+h2 .n{font-family:var(--f-dado);font-size:14px;color:var(--suave);font-weight:500}
+h3{font-size:18px}
+h4{font-size:13px;letter-spacing:.07em;text-transform:uppercase;color:var(--suave);font-family:var(--f-texto)}
+p{margin:0;max-width:72ch}
+.mono{font-family:var(--f-dado);font-size:.88em}
+.rotulo{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--suave);font-weight:700}
+.cabeca{display:flex;flex-direction:column;gap:12px;border-bottom:3px solid var(--tinta);padding-bottom:18px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;font-family:var(--f-dado);font-size:13px;color:var(--suave)}
+.secao{display:flex;flex-direction:column;gap:14px}
+.indice{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 24px;font-size:14px}
+.indice a{color:var(--tinta);text-decoration:none;border-bottom:1px dotted var(--linha)}
+.indice a:hover,.indice a:focus-visible{color:var(--acento);outline:none}
+.regras{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--linha)}
+.regra{display:grid;grid-template-columns:52px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--linha);break-inside:avoid}
+.regra .id{font-family:var(--f-dado);font-weight:500;color:var(--acento)}
+.regra b{display:block}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--suave);border-bottom:1.5px solid var(--tinta);padding:6px 8px}
+td{border-bottom:1px solid var(--linha);padding:6px 8px;vertical-align:top}
+tr{break-inside:avoid}
+.tabela{overflow-x:auto}
+td.c{font-family:var(--f-dado);white-space:nowrap}
+.fluxo{background:var(--superficie);border:1px solid var(--linha);border-radius:8px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;break-inside:avoid-page}
+.fluxo-cab{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+.fluxo-cab .cod{font-family:var(--f-dado);color:var(--acento);font-weight:500;margin-right:6px}
+.vol{font-family:var(--f-dado);font-size:13px;color:var(--suave);white-space:nowrap}
+.campos{display:grid;grid-template-columns:150px 1fr;gap:6px 14px;font-size:14px}
+.campos dt{color:var(--suave);font-size:12px;letter-spacing:.05em;text-transform:uppercase;font-weight:700;padding-top:2px}
+.campos dd{margin:0}
+.passos{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:2px}
+.hoje{border-left:3px solid var(--alerta);background:var(--alerta-fundo);padding:7px 11px;border-radius:0 6px 6px 0;font-size:14px}
+.hoje.ok{border-color:var(--acento);background:var(--acento-fundo)}
+.hoje.ruim{border-color:var(--erro);background:var(--erro-fundo)}
+.exemplo{border-left:3px solid var(--info);background:var(--info-fundo);padding:7px 11px;border-radius:0 6px 6px 0;font-size:14px}
+.grupo{display:flex;flex-direction:column;gap:12px}
+.diagrama{background:var(--placa);border:1px solid var(--linha);border-radius:8px;padding:14px;overflow-x:auto;break-inside:avoid}
+.diagrama .mermaid{display:flex;justify-content:center;color:#1C2A2B}
+.decisao{display:grid;grid-template-columns:28px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--linha);break-inside:avoid}
+.caixa{width:16px;height:16px;border:1.5px solid var(--tinta);border-radius:3px;margin-top:3px}
+.assin table td{height:46px}
+.rodape{font-size:12px;color:var(--suave);border-top:1px solid var(--linha);padding-top:10px}
+@media (max-width:640px){.campos{grid-template-columns:1fr}.campos dt{padding-top:6px}.regra{grid-template-columns:44px 1fr}}
+@media print{body{font-size:10.4pt;padding-block:0}main{gap:24px}.fluxo{padding:10px 12px}h2{font-size:16pt}}
+</style></head>
+<body><main>
+
+<header class="cabeca">
+  <span class="rotulo">Rede estadual · SEED/PR · documento de regras de negócio para validação</span>
+  <h1>Fluxos de matrícula e movimentação: SERE → SGP</h1>
+  <p>Este documento descreve cada situação de matrícula que acontece no SERE e como ela deve aparecer no SGP. Cada situação traz o volume de 2026, um exemplo real e o que está certo ou errado hoje. Ao final, a equipe responsável registra ciência das regras e decide os pontos em aberto.</p>
+  <div class="meta"><span>versão 1.0 · 05/11/2026</span><span>base: cópia do SERE de 05/11, espelho do SGP de 05/11</span><span>418.107 alunos estaduais em escopo</span></div>
+</header>
+
+<nav class="secao" aria-label="Índice">
+  <h4>Conteúdo</h4>
+  <div class="indice">
+    <a href="#regras">1. Regras gerais (R01–R15)</a>
+    <a href="#depara">2. De-para de situação e motivo</a>
+    <a href="#mapa">3. Fluxograma geral</a>
+    <a href="#entrada">4. Entrada na rede (A1–A5)</a>
+    <a href="#mudanca">5. Mudanças dentro da rede (B1–B10)</a>
+    <a href="#saida">6. Saídas (C1–C5)</a>
+    <a href="#conclusao">7. Conclusão (D1–D4)</a>
+    <a href="#posterior">8. Alterações depois do envio (E1–E4)</a>
+    <a href="#decisoes">9. Pontos para decisão</a>
+    <a href="#termo">10. Termo de ciência</a>
+  </div>
+</nav>
+
+<section class="secao" id="regras">
+  <h2><span class="n">1</span>Regras gerais</h2>
+  <p>As regras valem para todos os fluxos. A numeração serve de referência nas fichas e no termo de ciência.</p>
+  <div class="regras">
+    <div class="regra"><span class="id">R01</span><div><b>O SERE é a origem; o SGP espelha; o RCO é a fonte da frequência.</b>Nada é lançado no SGP sem registro correspondente no SERE. A frequência sai das aulas lançadas no RCO.</div></div>
+    <div class="regra"><span class="id">R02</span><div><b>Escopo da rede estadual.</b>Entram no SGP: Ensino Médio (etapas 25–27), Técnico Integrado (30–33), Subsequente (40), EJA Médio (71), Técnico Integrado EJA (74) e Normal (35–38). Ficam fora: fundamental, AEE sozinho, atividade complementar, CELEM e escola privada.</div></div>
+    <div class="regra"><span class="id">R03</span><div><b>O que é "ativo" muda de um sistema para o outro.</b>No SERE, ativo é a situação 1 (Matriculado). No SGP, é só a situação 0 (Em andamento). O código 1 do SGP significa "Informação Incorreta". Os dois domínios estão na seção 2.</div></div>
+    <div class="regra"><span class="id">R04</span><div><b>Uma matrícula por aluno, ano, etapa e escola.</b>Se as quatro coisas são iguais, é a mesma matrícula: troca de turma, turno ou itinerário na mesma série e escola não cria matrícula nova no SGP, só muda a enturmação. O SGP não bloqueia duplicata, então a regra depende de nós.</div></div>
+    <div class="regra"><span class="id">R05</span><div><b>Etapa, escola e ano não se editam.</b>Mudar qualquer um deles exige uma matrícula nova no SGP e o encerramento da antiga.</div></div>
+    <div class="regra"><span class="id">R06</span><div><b>Ordem obrigatória: criar a nova, enturmar, enviar a frequência e só então encerrar ou invalidar a antiga.</b>O aluno nunca fica descoberto. Invalidar a antiga antes faz perder a frequência dela (ver R07).</div></div>
+    <div class="regra"><span class="id">R07</span><div><b>"Informação Incorreta" (código 1) só para erro de cadastro.</b>É o equivalente do "Excluído por Erro" do SERE ou de matrícula criada errada. O código 1 desfaz a matrícula e invalida todas as frequências dela, então nunca serve para encerrar uma saída real de aluno.</div></div>
+    <div class="regra"><span class="id">R08</span><div><b>A data de fim é a data da movimentação no SERE.</b>Meses inteiramente fora do período da matrícula na escola recebem a justificativa de exclusão de frequência (código 4). A frequência não se apaga; apenas se marca.</div></div>
+    <div class="regra"><span class="id">R09</span><div><b>Matrícula encerrada não aceita nova movimentação.</b>Para corrigir um desfecho: reabrir (<span class="mono">editar_matricula = 2</span>) e reencerrar com o desfecho certo, em seguida e em pares. Entre os dois passos o aluno fica ativo; se o segundo falhar, devolve-se o desfecho original.</div></div>
+    <div class="regra"><span class="id">R10</span><div><b>Conclusão só com validação humana, caso a caso.</b>Conclusão e confirmação de conclusão são tratadas como definitivas. Nenhuma conclusão entra por regra automática. PPL nunca recebe Concluinte.</div></div>
+    <div class="regra"><span class="id">R11</span><div><b>Enturmação exige casamento completo.</b>O aluno só entra na turma se o CPF é o do próprio cadastro e se etapa, localização, período letivo e modalidade forem iguais aos da turma. Cadastro sem CPF não enturma.</div></div>
+    <div class="regra"><span class="id">R12</span><div><b>O SERE não guarda histórico.</b>Uma movimentação apagada pela escola some. Uma cópia datada do SERE é guardada antes de todo desfecho e serve de evidência.</div></div>
+    <div class="regra"><span class="id">R13</span><div><b>Cada tipo de operação no SGP tem sua janela de envio.</b>Movimentação, cadastro, frequência e confirmação de conclusão abrem e fecham separadamente. Com a janela fechada, a operação é recusada sem criar lote.</div></div>
+    <div class="regra"><span class="id">R14</span><div><b>Frequência = contagem de aulas do RCO na turma da matrícula.</b>Falta justificada conta como presença. Mês sem nenhuma aula vai como 1 hora ofertada e 0 presente. AEE e monitoria não somam na matrícula regular.</div></div>
+    <div class="regra"><span class="id">R15</span><div><b>A atribuição vem do registro certo.</b>Escola, etapa e datas saem da própria matrícula (pelo id), nunca de outro registro do mesmo aluno.</div></div>
+  </div>
+</section>
+
+<section class="secao" id="depara">
+  <h2><span class="n">2</span>De-para de situação e motivo</h2>
+  <div class="tabela"><table>
+    <thead><tr><th>SERE · situação</th><th>Motivo da movimentação no SERE</th><th>SGP · desfecho</th></tr></thead>
+    <tbody>
+      <tr><td>2 Transferido</td><td>1 mesmo estabelecimento · 14/15 curso ou turno</td><td class="c">2 Transf. mesma rede*</td></tr>
+      <tr><td>2 Transferido</td><td>2 rede pública do PR</td><td class="c">3 Transf. outra rede pública**</td></tr>
+      <tr><td>2 Transferido</td><td>3 rede privada/federal do PR</td><td class="c">4 Transf. rede privada</td></tr>
+      <tr><td>2 Transferido</td><td>4 outro estado</td><td class="c">3 Transf. outra rede pública</td></tr>
+      <tr><td>2 Transferido</td><td>5 destino não informado · 16 outro país</td><td class="c">5 Transf. rede não identificada</td></tr>
+      <tr><td>8 Remanejado</td><td>—</td><td class="c">2 Transf. mesma rede (se mudou etapa ou escola)</td></tr>
+      <tr><td>3 Desistente</td><td>6–11, 13 (mudança, trabalho, distância, doença, desestímulo, não informado)</td><td class="c">7 Abandono</td></tr>
+      <tr><td>3 Desistente</td><td>12 Óbito</td><td class="c">8 Óbito</td></tr>
+      <tr><td>5 Sem Frequência</td><td>(sem motivo)</td><td class="c">7 Abandono, com data da última atualização</td></tr>
+      <tr><td>4 Reclassificado</td><td>—</td><td class="c">9 Reclassificação (ver decisão 3)</td></tr>
+      <tr><td>6 Excluído por Erro</td><td>—</td><td class="c">1 Informação Incorreta (único uso)</td></tr>
+      <tr><td>13 Concluinte</td><td>17 Exame Estadual de EJA · 18 ENCCEJA · 19 ENEM</td><td class="c">11 Concluinte, forma 4 + confirmação</td></tr>
+      <tr><td>Resultado final</td><td>1 aprovado · 2 aprovado pelo conselho</td><td class="c">11 na última série · 10 Aprovado nas demais</td></tr>
+      <tr><td>Resultado final</td><td>4 reprovado · 5 reprovado por frequência</td><td class="c">12 Reprovado</td></tr>
+    </tbody>
+  </table></div>
+  <p class="mono" style="color:var(--suave)">* Não gera matrícula nova se a série e a escola forem as mesmas (R04). ** Se o destino for uma escola estadual, o desfecho é 2 (ver decisão 2).</p>
+</section>
+
+<section class="secao" id="mapa">
+  <h2><span class="n">3</span>Fluxograma geral</h2>
+  <p>Começa pelo que mudou no SERE e chega ao que fazer no SGP.</p>
+  <div class="diagrama"><pre class="mermaid">
+flowchart TD
+  A(["Mudança no SERE"]) --> B{"Aluno continua<br/>na rede estadual?"}
+  B -- "Não" --> S{"Por quê?"}
+  S -- "Transferência" --> S1["Encerrar com 3, 4 ou 5<br/>conforme o motivo"]
+  S -- "Desistência ou<br/>sem frequência" --> S2["Encerrar com 7 Abandono<br/>(óbito = 8)"]
+  S -- "Conclusão" --> S3["Validar caso a caso<br/>11 Concluinte + confirmação"]
+  S -- "Excluído por erro" --> S4["1 Informação Incorreta"]
+  B -- "Sim" --> C{"Mudou etapa,<br/>escola ou ano?"}
+  C -- "Não" --> C1["Mesma matrícula:<br/>só trocar a turma (enturmação)"]
+  C -- "Sim" --> D["1. Criar a nova matrícula"]
+  D --> E["2. Enturmar e enviar<br/>a frequência na nova"]
+  E --> F{"A antiga era<br/>um erro de cadastro?"}
+  F -- "Sim" --> F1["3. Invalidar a antiga (1)"]
+  F -- "Não" --> F2["3. Encerrar a antiga com<br/>2 Transf. mesma rede<br/>na data do SERE"]
+  </pre></div>
+</section>
+
+<section class="secao" id="entrada">
+  <h2><span class="n">4</span>Entrada na rede</h2>
+  <div class="grupo">
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">A1</span>Matrícula de início de ano</h3><span class="vol">maioria dos 418 mil alunos</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>O aluno é matriculado numa série e turma, em janeiro ou fevereiro.</dd>
+      <dt>No SGP</dt><dd><ol class="passos"><li>Cadastro do estudante com CPF e matrícula na etapa da série.</li><li>Enturmação na turma correspondente (R11).</li><li>Frequência mensal a partir do início do período letivo.</li></ol></dd>
+      <dt>Regras</dt><dd>R02 · R04 · R11 · R14</dd>
+    </dl>
+    <div class="hoje">Hoje: 1.146 alunos ativos no SERE ainda faltam no SGP. Desses, 404 não têm CPF no SERE (a escola precisa corrigir) e 286 nunca foram cadastrados.</div>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">A2</span>Ingresso durante o ano</h3><span class="vol">contínuo · entra pela rotina diária</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>Aluno novo na rede matriculado depois do início das aulas.</dd>
+      <dt>No SGP</dt><dd>O mesmo que A1, com data de início igual à da matrícula no SERE. A frequência começa no mês do ingresso; os meses anteriores ficam sem registro.</dd>
+      <dt>Regras</dt><dd>R08 · R14</dd>
+    </dl>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">A3</span>Registro duplo: formação geral + itinerário</h3><span class="vol">118.914 alunos</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>Na 3ª série do médio, no técnico integrado e na EJA Médio, o aluno tem duas matrículas no mesmo dia: uma de formação geral básica (FGB) e outra de itinerário, em turmas diferentes.</dd>
+      <dt>No SGP</dt><dd>Uma matrícula só, a de base comum. A frequência soma as aulas das duas turmas.</dd>
+      <dt>Regras</dt><dd>R04 · R14</dd>
+    </dl>
+    <div class="hoje ok">Hoje: tratado. Não gera duplicata.</div>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">A4</span>Curso semestral: 1º e 2º período letivo</h3><span class="vol">17.932 alunos (10.682 EJA · 7.184 subsequente)</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>Uma matrícula por período letivo (261 e 262), cada uma na turma do seu semestre.</dd>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10301…163, EJA Médio, escola 41144295. Matrícula do 1º período em 15/01 e do 2º em 16/07. No SGP só existe a do 1º período, ainda "Em andamento".</div>
+      <dt>No SGP</dt><dd>O semestre fica na turma (forma de organização "períodos semestrais" ou "módulos"). <b>Falta decidir</b> se o SGP deve ter uma matrícula por período ou uma por ano (decisão 4).</dd>
+      <dt>Regras</dt><dd>R04 · R05</dd>
+    </dl>
+    <div class="hoje">Hoje: em 57% dos casos não há matrícula do 2º período no SGP, e a do 1º atravessa o ano levando a frequência do 2º semestre.</div>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">A5</span>Duas matrículas ativas ao mesmo tempo</h3><span class="vol">3.460 alunos</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>Regular com concomitante; EJA com subsequente; na EJA prisional (PPL), uma matrícula por disciplina.</dd>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 93315…904, EJA PPL, escola 41356934. Biologia desde 25/05 e Química desde 15/06, as duas ativas. No SGP as duas estão "Em andamento" na etapa 71.</div>
+      <dt>No SGP</dt><dd>Etapas diferentes (por exemplo 25 e 39): duas matrículas válidas. Mesma etapa e escola (as disciplinas da PPL): <b>falta decidir</b> se é uma matrícula só (decisão 5).</dd>
+      <dt>Regras</dt><dd>R04</dd>
+    </dl>
+  </article>
+  </div>
+</section>
+
+<section class="secao" id="mudanca">
+  <h2><span class="n">5</span>Mudanças dentro da rede</h2>
+
+  <div class="diagrama"><pre class="mermaid">
+flowchart LR
+  A["Matrícula antiga<br/>ativa"] --> B["Criar matrícula nova<br/>(nova etapa ou escola)"]
+  B --> C["Enturmar na nova"]
+  C --> D["Frequência do mês<br/>na nova"]
+  D --> E["Encerrar a antiga:<br/>2 Transf. mesma rede<br/>data = movimentação no SERE"]
+  E --> F["Meses posteriores<br/>na antiga: exclusão (4)"]
+  </pre></div>
+
+  <div class="grupo">
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">B1</span>Remanejamento de turma na mesma escola</h3><span class="vol">490 alunos</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>A matrícula fica "Remanejado" e outra é aberta na turma nova, na mesma escola. Na mediana, a troca acontece 33 dias após a matrícula.</dd>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10172…838, 2ª série, escola 41133102. Em LGG/CHS desde 07/01, remanejada após 174 dias (30/06) para MAT/CNT e rematriculada em 02/07. No SGP a matrícula antiga está como "Informação Incorreta" e não há a nova.</div>
+      <dt>No SGP</dt><dd>Mesma série e escola, então é a mesma matrícula (R04): apenas a enturmação muda para a turma nova. Nada se encerra.</dd>
+      <dt>Regras</dt><dd>R04 · R11</dd>
+    </dl>
+    <div class="hoje ruim">Hoje (amostra): só 39% das matrículas antigas continuam "Em andamento", como deveriam. As demais foram invalidadas ou encerradas.</div>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">B2</span>Troca de curso, itinerário ou turno na mesma escola e série</h3><span class="vol">9.105 alunos</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>A matrícula é encerrada como "Transferido" e outra é aberta no mesmo dia, na mesma escola e série, com outro itinerário ou turno. Mediana: 63 dias após a matrícula.</dd>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10084…538, 3ª série, escola 41063325. O SERE abriu uma segunda matrícula e só depois encerrou a primeira. No SGP as duas estão "Em andamento": é duplicata.</div>
+      <dt>No SGP</dt><dd>Não se cria matrícula nova nem se encerra a antiga: é a mesma matrícula (R04). Só a turma muda.</dd>
+      <dt>Regras</dt><dd>R04 · R07</dd>
+    </dl>
+    <div class="hoje ruim">Hoje (amostra): em 19% dos casos a matrícula antiga foi invalidada (o que apaga a frequência dela) e em 14% foi encerrada como transferência sem ter havido saída.</div>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">B3</span>Transferência entre escolas estaduais, mesmo curso</h3><span class="vol">21.770 alunos</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>Transferência para outra escola estadual, com nova matrícula em geral no mesmo dia. Mediana: 88 dias após a matrícula.</dd>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real, correto: CGM 10050…813, 1ª série. Escola 41071395 desde 31/03, transferida após 76 dias (15/06) para a 41071948, com matrícula no mesmo dia. No SGP a antiga está "Transf. mesma rede" e a nova "Em andamento".</div>
+      <dt>No SGP</dt><dd><ol class="passos"><li>Criar a matrícula na escola nova e enturmar.</li><li>Encerrar a antiga com 2 (Transf. mesma rede), com a data do SERE.</li></ol></dd>
+      <dt>Regras</dt><dd>R05 · R06 · R08</dd>
+    </dl>
+    <div class="hoje">Hoje (amostra): 71% das novas estão "Em andamento" e 50% das antigas estão encerradas como transferência. Outros 20% das antigas foram invalidadas, o que apaga a frequência delas.</div>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">B4</span>Do regular para o técnico integrado</h3><span class="vol">1.960 alunos</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>Transferência do Ensino Médio regular para um curso técnico integrado, na mesma escola ou em outra. Mediana: 44 dias após a matrícula.</dd>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10097…794, 1ª série, escola 41086449. No regular (IFA LGG/CHS) desde 19/01; após 57 dias (17/03) passou ao técnico integrado na mesma escola. No SGP a antiga está "Transf. mesma rede" (etapa 25), certo, mas a nova (etapa 30) não foi encontrada.</div>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10206…896, escola 41146093. Passou ao técnico após 73 dias (27/03). A nova está certa (etapa 30, em andamento), mas a antiga foi encerrada como "Aprovado" em março, o que está errado.</div>
+      <dt>No SGP</dt><dd>A etapa muda (25 → 30), então: criar a nova na etapa do técnico, enturmar, enviar a frequência e encerrar a antiga com 2 na data do SERE.</dd>
+      <dt>Regras</dt><dd>R05 · R06</dd>
+    </dl>
+    <div class="hoje">Hoje (amostra): só 45% das novas estão "Em andamento"; 22% foram invalidadas.</div>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">B5</span>Do técnico integrado para o regular</h3><span class="vol">7.109 alunos</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>O aluno sai do técnico e volta ao Ensino Médio regular. Mediana: 99 dias após a matrícula.</dd>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real, correto: CGM 10354…910. Técnico em Edificações, 1ª série, escola 41071972, desde 28/01. Após 51 dias (20/03) foi para o regular em outra escola (41072308) no mesmo dia. No SGP a antiga está "Transf. mesma rede" (etapa 30) e a nova "Em andamento" (etapa 25).</div>
+      <dt>No SGP</dt><dd>O mesmo que B4, no sentido contrário (30 → 25).</dd>
+      <dt>Regras</dt><dd>R05 · R06</dd>
+    </dl>
+    <div class="hoje">Hoje (amostra): 56% das novas estão "Em andamento" e 31% não foram encontradas; 29% das antigas continuam ativas, sem encerramento.</div>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">B6</span>Do regular ou técnico para a EJA Médio</h3><span class="vol">971 alunos</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>Aluno com idade para a EJA transfere-se para ela. Mediana: 97 dias após a matrícula.</dd>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10096…090, 2ª série, escola 41018753, desde 27/02. Transferida após 186 dias (01/09); matriculou-se na EJA da escola 41354990 em 21/09, 20 dias depois. No SGP a nova está certa (etapa 71, em andamento), mas a antiga foi encerrada como "outra rede pública", quando ela continua na rede estadual.</div>
+      <dt>No SGP</dt><dd>A etapa muda (25–27 → 71): criar a nova, enturmar e encerrar a antiga com 2.</dd>
+      <dt>Regras</dt><dd>R05 · R06</dd>
+    </dl>
+    <div class="hoje">Hoje (amostra): 28% das antigas foram invalidadas e 12% das novas já estão como "Abandono".</div>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">B7</span>Da EJA Médio para o regular ou técnico</h3><span class="vol">76 alunos</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>Fluxo raro. Mediana: 30 dias após a matrícula.</dd>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10049…498. EJA na escola 41357574 desde 05/02; após 19 dias passou para a 1ª série do regular na escola 41076540 (23/02).</div>
+      <dt>No SGP</dt><dd>O mesmo que B6, no sentido contrário.</dd>
+      <dt>Regras</dt><dd>R05 · R06</dd>
+    </dl>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">B8</span>Formação de Docentes (Normal) ↔ regular ou técnico</h3><span class="vol">1.454 alunos</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>Saída da Formação de Docentes para o regular (1.129 casos) ou o caminho contrário. Mediana: 76 dias após a matrícula.</dd>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10114…195. Formação de Docentes, 1ª série, escola 41106075, desde 21/01. Após 205 dias (14/08) foi para o regular na escola 41089944 (17/08). No SGP a antiga está "Transf. mesma rede", mas cadastrada na <b>etapa 30 (técnico integrado)</b>, não na 35 (Normal).</div>
+      <dt>No SGP</dt><dd>Etapa diferente, então se cria a nova e se encerra a antiga com 2. <b>Falta decidir</b> a etapa da Formação de Docentes no SGP (decisão 6).</dd>
+      <dt>Regras</dt><dd>R02 · R05 · R06</dd>
+    </dl>
+    <div class="hoje">Hoje: o SERE tem 10.098 matrículas de Normal, e o espelho do SGP de setembro tinha só 34 nas etapas 35–36. As demais aparecem como técnico integrado.</div>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">B9</span>Reclassificação: muda de série no meio do ano</h3><span class="vol">188 alunos</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>O aluno é reclassificado e passa para outra série na mesma escola. Mediana: 76 dias após a matrícula.</dd>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10065…066, escola 41056957. Na 2ª série desde 13/01; após 87 dias (10/04) passou para a 3ª. No SGP a nova está certa (etapa 27, em andamento), mas a antiga foi marcada "Informação Incorreta", o que apagou a frequência de fevereiro a abril.</div>
+      <dt>No SGP</dt><dd>Criar a nova na série nova e encerrar a antiga com 9 (Reclassificação), não com 1.</dd>
+      <dt>Regras</dt><dd>R05 · R06 · R07</dd>
+    </dl>
+    <div class="hoje ruim">Hoje (amostra): 42% das antigas foram invalidadas e só 34% encerradas como transferência. Nenhuma com 9 na amostra.</div>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">B10</span>Matrícula criada na etapa errada no SGP</h3><span class="vol">erro de carga, não do aluno</span></div>
+    <dl class="campos">
+      <dt>O que acontece</dt><dd>O SGP recebeu a matrícula numa etapa diferente da série do SERE.</dd>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10038…767. Criada em 02/03 na 1ª série por engano; a correta, na 2ª série, foi criada em 04/03; depois a errada foi invalidada.</div>
+      <dt>No SGP</dt><dd><ol class="passos"><li>Criar a matrícula na etapa certa.</li><li>Enviar nela a frequência de todos os meses.</li><li>Só então invalidar a errada (1).</li></ol></dd>
+      <dt>Regras</dt><dd>R05 · R06 · R07</dd>
+    </dl>
+  </article>
+  </div>
+</section>
+
+<section class="secao" id="saida">
+  <h2><span class="n">6</span>Saídas</h2>
+  <div class="grupo">
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">C1</span>Transferência para fora da rede estadual</h3><span class="vol">19.148 alunos</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>"Transferido" sem nova matrícula estadual. Motivos: outro estado 7.497 · não informado 3.997 · rede pública do PR 2.790 · curso/turno 2.060 · privada/federal 1.990 · outro país 807.</dd>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10080…256, 3ª série, escola 41093216. Transferida para outro estado em 24/02; no SGP está "Transf. mesma rede". O correto é 3 (outra rede pública).</div>
+      <dt>No SGP</dt><dd>Encerrar pelo motivo, conforme o de-para da seção 2, com a data do SERE.</dd>
+      <dt>Regras</dt><dd>R08 · seção 2</dd>
+    </dl>
+    <div class="tabela"><table>
+      <thead><tr><th>Motivo no SERE</th><th>Esperado</th><th>Certo hoje</th><th>Gravado como "mesma rede"</th></tr></thead>
+      <tbody>
+        <tr><td>4 Outro estado</td><td class="c">3</td><td class="c">1.763</td><td class="c">3.298</td></tr>
+        <tr><td>5 Não informado</td><td class="c">5</td><td class="c">800</td><td class="c">1.577</td></tr>
+        <tr><td>3 Privada/federal</td><td class="c">4</td><td class="c">204</td><td class="c">1.345</td></tr>
+        <tr><td>16 Outro país</td><td class="c">5</td><td class="c">182</td><td class="c">310</td></tr>
+        <tr><td>2 Rede pública do PR</td><td class="c">3 (ou 2)</td><td class="c">408</td><td class="c">1.181</td></tr>
+      </tbody>
+    </table></div>
+    <div class="hoje ruim">Hoje: cerca de 6.500 saídas para fora da rede estadual estão gravadas como transferência dentro da rede.</div>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">C2</span>Desistência</h3><span class="vol">15.559 alunos</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>"Desistente". Motivos: não informado 9.535 · trabalho 2.486 · desestímulo 2.343 · mudança 522 · doença 271 · distância 176 · óbito 141 · falta de recurso 85.</dd>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 65763…222, 3ª série, escola 41074955. Matriculado em 28/07, desistente em 03/11 (lançado no mesmo dia). No SGP ainda "Em andamento"; entra na rotina seguinte.</div>
+      <dt>No SGP</dt><dd>7 Abandono com a data da movimentação. O óbito (motivo 12) vai como 8.</dd>
+      <dt>Regras</dt><dd>R08 · R12</dd>
+    </dl>
+    <div class="hoje">Hoje (amostra): 71% como Abandono; 10% foram invalidadas, perdendo o desfecho real.</div>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">C3</span>Sem Frequência</h3><span class="vol">10.050 alunos</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>Situação 5, sem movimentação nem motivo.</dd>
+      <dt>No SGP</dt><dd>7 Abandono, com a data da última atualização da matrícula (decisão de 09/09).</dd>
+      <dt>Regras</dt><dd>R08</dd>
+    </dl>
+    <div class="hoje">Hoje (amostra): 61% como Abandono; 23% como "Informação Incorreta".</div>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">C4</span>Desistência e retorno</h3><span class="vol">704 alunos</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>O aluno desiste e volta meses depois, na mesma escola ou em outra.</dd>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 41680…920. Técnico em Farmácia (subsequente), escola 41024044, desde 19/01. Desistente após 49 dias (09/03); voltou em 16/07 em outra escola (41008863), 129 dias depois. No SGP a nova está "Em andamento"; a antiga não foi encontrada.</div>
+      <dt>No SGP</dt><dd>Outra escola ou etapa: a antiga fica em 7 Abandono e se cria a nova. Mesma escola e etapa: reabrir a antiga (R09) em vez de criar outra (R04).</dd>
+      <dt>Regras</dt><dd>R04 · R09</dd>
+    </dl>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">C5</span>Excluído por erro</h3><span class="vol">415 alunos refeitos</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>A escola exclui a matrícula por erro e, em geral, refaz outra.</dd>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10114…564, escola 41387260. Matrícula na 2ª série em 05/02, excluída por erro após 46 dias e refeita na 1ª série em 23/03.</div>
+      <dt>No SGP</dt><dd>1 Informação Incorreta na excluída, depois de garantir a frequência na refeita (R06).</dd>
+      <dt>Regras</dt><dd>R06 · R07</dd>
+    </dl>
+  </article>
+  </div>
+</section>
+
+<section class="secao" id="conclusao">
+  <h2><span class="n">7</span>Conclusão</h2>
+  <div class="diagrama"><pre class="mermaid">
+flowchart LR
+  A["Concluinte no SERE"] --> B{"Evidência confere?<br/>SERE + banco de exames<br/>ou resultado final"}
+  B -- "Não" --> X["Não enviar.<br/>Devolver à escola"]
+  B -- "Sim" --> C{"Matrícula no SGP"}
+  C -- "Ativa" --> D["11 Concluinte, forma 4<br/>data do SERE"]
+  C -- "Encerrada<br/>(ex.: Abandono)" --> E["Reabrir e reencerrar<br/>como 11 na hora (R09)"]
+  D --> F["Confirmar conclusão"]
+  E --> F
+  </pre></div>
+  <div class="grupo">
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">D1</span>Conclusão no fim do ano letivo</h3><span class="vol">dezembro</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>Resultado final da turma: aprovado, aprovado pelo conselho, reprovado ou reprovado por frequência.</dd>
+      <dt>No SGP</dt><dd>Última série aprovada: 11 Concluinte. Demais séries: 10 Aprovado. Reprovado (inclusive por frequência): 12. "Vide observação" ou sem resultado: não enviar.</dd>
+      <dt>Regras</dt><dd>R10 · seção 2</dd>
+    </dl>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">D2</span>Conclusão pelo Exame Estadual de EJA</h3><span class="vol">5.292 alunos em 2026</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>Movimentação "Concluinte – Exames Estaduais de EJA", normalmente com a data de divulgação do resultado. O exame é feito tanto por alunos da EJA quanto por alunos do regular com 18 anos ou mais.</dd>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real, o caso que motivou este documento: CGM 10038…767, 2ª série do regular, escola 41049160.
+        <ul class="passos" style="margin-top:4px">
+          <li>25/05: desistente; o Abandono foi enviado ao SGP em 21/07.</li>
+          <li>15/06: aprovada no exame (nota 6,0); resultado divulgado em 07/07.</li>
+          <li>15/10: a escola relançou a conclusão com data de 15/06 e apagou a desistência.</li>
+          <li>05/11: corrigido no SGP para Concluinte, forma 4, e confirmado.</li>
+        </ul></div>
+      <dt>No SGP</dt><dd>11 Concluinte, forma 4 ("Programa ou Prova de Aceleração"), seguido da confirmação de conclusão. Antes, conferir a aprovação no banco de exames.</dd>
+      <dt>Regras</dt><dd>R09 · R10 · R12</dd>
+    </dl>
+    <div class="hoje ruim">Hoje (amostra): 59% como Concluinte, 17% "Informação Incorreta" e 12% como Abandono. Nos 582 com Abandono, o banco de exames confirma a aprovação de 577.</div>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">D3</span>Conclusão por ENCCEJA ou ENEM</h3><span class="vol">2 casos em 2026</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>Motivos 18 (ENCCEJA) e 19 (ENEM).</dd>
+      <dt>No SGP</dt><dd>11 Concluinte. O ENCCEJA tem um campo próprio no SGP ("ENCCEJA + 400 horas"). Caso a caso.</dd>
+      <dt>Regras</dt><dd>R10</dd>
+    </dl>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">D4</span>EJA prisional (PPL)</h3><span class="vol">9 CEEBJAs</span></div>
+    <dl class="campos">
+      <dt>No SERE</dt><dd>Uma matrícula por disciplina; a frequência é lançada com atraso (44% das aulas são retroativas).</dd>
+      <dt>No SGP</dt><dd>Nunca Concluinte: só 10 Aprovado na disciplina que terminou. Os desfechos estão parados por decisão até haver regra própria (decisão 5).</dd>
+      <dt>Regras</dt><dd>R10</dd>
+    </dl>
+  </article>
+  </div>
+</section>
+
+<section class="secao" id="posterior">
+  <h2><span class="n">8</span>Alterações depois do envio</h2>
+  <p>São os casos fora do fluxo normal: o SERE muda depois de o SGP já ter recebido o desfecho. Como o SERE não guarda histórico (R12), só as nossas cópias mostram o que havia antes.</p>
+  <div class="grupo">
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">E1</span>A escola apaga ou troca uma movimentação já enviada</h3><span class="vol">120 apagadas entre 16/10 e 05/11</span></div>
+    <dl class="campos">
+      <dt>O que acontece</dt><dd>Entre as cópias de 16/10 e 05/11 sumiram 55 desistências, 52 transferências, 9 remanejamentos, 3 reclassificações e 1 conclusão. Entre 27/07 e 16/10 tinham sumido 1.108 remanejamentos, 421 desistências, 240 transferências e 57 conclusões.</dd>
+      <dt>No SGP</dt><dd>O desfecho enviado fica valendo até alguém corrigir. A correção segue R09. Se a mudança for para conclusão, segue também R10.</dd>
+      <dt>Regras</dt><dd>R09 · R10 · R12</dd>
+    </dl>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">E2</span>Lançamento com data retroativa</h3><span class="vol">2.522 lançadas com mais de 30 dias de atraso</span></div>
+    <dl class="campos">
+      <dt>O que acontece</dt><dd>A data da movimentação é antiga, mas a inclusão é recente: 950 transferências, 589 conclusões, 537 remanejamentos e 440 desistências. Depois de 16/10 entraram 32 com data anterior.</dd>
+      <dt>No SGP</dt><dd>Encerrar com a data real (a da movimentação) e marcar com exclusão (4) a frequência dos meses posteriores que já tinha sido enviada.</dd>
+      <dt>Regras</dt><dd>R08</dd>
+    </dl>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">E3</span>Matrícula do ano anterior ainda aberta</h3><span class="vol">1.545 em 2025, 1.405 já resolvidas</span></div>
+    <dl class="campos">
+      <dt>No SGP</dt><dd>Enviar a frequência que falta e depois o desfecho de 2025 pelo resultado do SERE. Em caso de etapa errada, segurar (risco de afetar o Pé-de-Meia).</dd>
+      <dt>Regras</dt><dd>R06 · R08</dd>
+    </dl>
+  </article>
+
+  <article class="fluxo">
+    <div class="fluxo-cab"><h3><span class="cod">E4</span>Dois cadastros da mesma pessoa, ou cadastro sem CPF</h3><span class="vol">169 duplicatas na mesma escola · 404 sem CPF</span></div>
+    <dl class="campos">
+      <dt>No SGP</dt><dd>Enturmar no cadastro que tem CPF; depois invalidar o cadastro "fantasma". Aluno sem CPF no SERE volta para a escola corrigir.</dd>
+      <dt>Regras</dt><dd>R06 · R07 · R11</dd>
+    </dl>
+  </article>
+  </div>
+</section>
+
+<section class="secao" id="decisoes">
+  <h2><span class="n">9</span>Pontos para decisão</h2>
+  <div>
+    <div class="decisao"><span class="caixa"></span><div><b>1. Troca de itinerário ou turno na mesma escola e série (B1, B2):</b> confirmar que é a mesma matrícula no SGP e que só a turma muda. Desfazer as duplicatas atuais.</div></div>
+    <div class="decisao"><span class="caixa"></span><div><b>2. Transferência para a "rede pública do PR" (C1):</b> usar 2 quando o destino for escola estadual e 3 quando for municipal? Corrigir as cerca de 6.500 saídas gravadas como "mesma rede"?</div></div>
+    <div class="decisao"><span class="caixa"></span><div><b>3. Reclassificação (B9):</b> encerrar a antiga com 9 (Reclassificação) em vez de 1, preservando a frequência.</div></div>
+    <div class="decisao"><span class="caixa"></span><div><b>4. Curso semestral (A4):</b> uma matrícula por período letivo ou uma por ano no SGP?</div></div>
+    <div class="decisao"><span class="caixa"></span><div><b>5. PPL (A5, D4):</b> uma matrícula por disciplina ou uma por aluno? Regra de desfecho própria.</div></div>
+    <div class="decisao"><span class="caixa"></span><div><b>6. Formação de Docentes (B8):</b> etapa 35–38 (Normal) ou 30–33 (técnico integrado) no SGP?</div></div>
+    <div class="decisao"><span class="caixa"></span><div><b>7. Conclusão por exame com desfecho antigo (D2, E1):</b> corrigir os 577 casos provados, com validação caso a caso e confirmação, pela equipe EJA.</div></div>
+    <div class="decisao"><span class="caixa"></span><div><b>8. Responsável por casos fora do fluxo normal (seção 8):</b> quem analisa e valida os ajustes, e em que ferramenta.</div></div>
+  </div>
+</section>
+
+<section class="secao assin" id="termo">
+  <h2><span class="n">10</span>Termo de ciência</h2>
+  <p>Declaramos ter lido e compreendido as regras R01 a R15, o de-para da seção 2 e os fluxos A1 a E4 deste documento (versão 1.0, 05/11/2026). Os pontos da seção 9 serão decididos e registrados em nova versão.</p>
+  <div class="tabela"><table>
+    <thead><tr><th style="width:30%">Nome</th><th style="width:28%">Setor / função</th><th style="width:28%">Assinatura</th><th>Data</th></tr></thead>
+    <tbody>
+      <tr><td></td><td>CMDE · integração SGP</td><td></td><td></td></tr>
+      <tr><td></td><td>Equipe EJA</td><td></td><td></td></tr>
+      <tr><td></td><td>Documentação escolar</td><td></td><td></td></tr>
+      <tr><td></td><td>Gestão do SERE</td><td></td><td></td></tr>
+      <tr><td></td><td>Chefia imediata</td><td></td><td></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<footer class="rodape">Base: cópia local do SERE de 05/11/2026 (matrículas e movimentações), espelho do SGP de 05/11/2026 e cópias do SERE de 27/07 e 16/10. O "Hoje" de cada ficha vem de uma amostra de 400 casos por fluxo; as matrículas foram pareadas por escola e data de início (até 45 dias de diferença). CGMs parcialmente ocultos.</footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<script>
+if (window.mermaid) {
+  mermaid.initialize({startOnLoad: true, securityLevel: "strict", theme: "base", flowchart: {curve: "basis", htmlLabels: true},
+    themeVariables: {fontFamily: "Atkinson Hyperlegible, Segoe UI, sans-serif", fontSize: "14px", primaryColor: "#E2F0EA",
+      primaryBorderColor: "#0E6B57", primaryTextColor: "#1C2A2B", lineColor: "#5B6B6B", secondaryColor: "#FBF0E1", tertiaryColor: "#FFFFFF",
+      edgeLabelBackground: "#FFFFFF"}});
+}
+</script>
+</body></html>
