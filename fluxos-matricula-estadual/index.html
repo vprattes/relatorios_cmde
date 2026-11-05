@@ -77,7 +77,7 @@ td.c{font-family:var(--f-dado);white-space:nowrap}
   <span class="rotulo">Rede estadual · SEED/PR · documento de regras de negócio para validação</span>
   <h1>Fluxos de matrícula e movimentação: SERE → SGP</h1>
   <p>Este documento descreve cada situação de matrícula que acontece no SERE e como ela deve aparecer no SGP. Cada situação traz o volume de 2026, um exemplo real e o que está certo ou errado hoje. Ao final, a equipe responsável registra ciência das regras e decide os pontos em aberto.</p>
-  <div class="meta"><span>versão 1.0 · 05/11/2026</span><span>base: cópia do SERE de 05/11, espelho do SGP de 05/11</span><span>418.107 alunos estaduais em escopo</span></div>
+  <div class="meta"><span>versão 1.1 · 05/11/2026</span><span>base: cópia do SERE de 05/11, espelho do SGP de 05/11</span><span>418.107 alunos estaduais em escopo</span></div>
 </header>
 
 <nav class="secao" aria-label="Índice">
@@ -211,7 +211,7 @@ flowchart TD
     <div class="fluxo-cab"><h3><span class="cod">A5</span>Duas matrículas ativas ao mesmo tempo</h3><span class="vol">3.460 alunos</span></div>
     <dl class="campos">
       <dt>No SERE</dt><dd>Regular com concomitante; EJA com subsequente; na EJA prisional (PPL), uma matrícula por disciplina.</dd>
-      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 93315…904, EJA PPL, escola 41356934. Biologia desde 25/05 e Química desde 15/06, as duas ativas. No SGP as duas estão "Em andamento" na etapa 71.</div>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 93315…904, EJA PPL, escola 41356934. Quatro disciplinas ativas no SERE: Educação Física desde 11/02, Arte desde 17/03, Biologia desde 25/05 e Química desde 15/06. No SGP existe só a matrícula de Química, desde 15/06, com presença zero em todos os meses; as de fevereiro a maio não existem.</div>
       <dt>No SGP</dt><dd>Etapas diferentes (por exemplo 25 e 39): duas matrículas válidas. Mesma etapa e escola (as disciplinas da PPL): <b>falta decidir</b> se é uma matrícula só (decisão 5).</dd>
       <dt>Regras</dt><dd>R04</dd>
     </dl>
@@ -236,7 +236,7 @@ flowchart LR
     <div class="fluxo-cab"><h3><span class="cod">B1</span>Remanejamento de turma na mesma escola</h3><span class="vol">490 alunos</span></div>
     <dl class="campos">
       <dt>No SERE</dt><dd>A matrícula fica "Remanejado" e outra é aberta na turma nova, na mesma escola. Na mediana, a troca acontece 33 dias após a matrícula.</dd>
-      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10172…838, 2ª série, escola 41133102. Em LGG/CHS desde 07/01, remanejada após 174 dias (30/06) para MAT/CNT e rematriculada em 02/07. No SGP a matrícula antiga está como "Informação Incorreta" e não há a nova.</div>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real, correto: CGM 10172…838, 2ª série, escola 41133102. Em LGG/CHS desde 07/01, remanejada após 174 dias (30/06) para MAT/CNT e rematriculada em 02/07. No SGP há uma única matrícula da 2ª série, em andamento desde 07/01, como pede a regra. Uma matrícula da 1ª série, criada por engano na carga, foi invalidada.</div>
       <dt>No SGP</dt><dd>Mesma série e escola, então é a mesma matrícula (R04): apenas a enturmação muda para a turma nova. Nada se encerra.</dd>
       <dt>Regras</dt><dd>R04 · R11</dd>
     </dl>
@@ -247,7 +247,7 @@ flowchart LR
     <div class="fluxo-cab"><h3><span class="cod">B2</span>Troca de curso, itinerário ou turno na mesma escola e série</h3><span class="vol">9.105 alunos</span></div>
     <dl class="campos">
       <dt>No SERE</dt><dd>A matrícula é encerrada como "Transferido" e outra é aberta no mesmo dia, na mesma escola e série, com outro itinerário ou turno. Mediana: 63 dias após a matrícula.</dd>
-      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10084…538, 3ª série, escola 41063325. O SERE abriu uma segunda matrícula e só depois encerrou a primeira. No SGP as duas estão "Em andamento": é duplicata.</div>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10058…770, 1ª série, escola 41028279. Em LGG/CHS desde 14/01, passou para MAT/CNT em 25/05 na mesma escola (o SERE registrou como "transferência para a rede pública"). No SGP ficaram duas matrículas em andamento, na mesma turma, com a frequência de maio a setembro gravada nas duas: é duplicata.</div>
       <dt>No SGP</dt><dd>Não se cria matrícula nova nem se encerra a antiga: é a mesma matrícula (R04). Só a turma muda.</dd>
       <dt>Regras</dt><dd>R04 · R07</dd>
     </dl>
@@ -269,8 +269,8 @@ flowchart LR
     <div class="fluxo-cab"><h3><span class="cod">B4</span>Do regular para o técnico integrado</h3><span class="vol">1.960 alunos</span></div>
     <dl class="campos">
       <dt>No SERE</dt><dd>Transferência do Ensino Médio regular para um curso técnico integrado, na mesma escola ou em outra. Mediana: 44 dias após a matrícula.</dd>
-      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10097…794, 1ª série, escola 41086449. No regular (IFA LGG/CHS) desde 19/01; após 57 dias (17/03) passou ao técnico integrado na mesma escola. No SGP a antiga está "Transf. mesma rede" (etapa 25), certo, mas a nova (etapa 30) não foi encontrada.</div>
-      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10206…896, escola 41146093. Passou ao técnico após 73 dias (27/03). A nova está certa (etapa 30, em andamento), mas a antiga foi encerrada como "Aprovado" em março, o que está errado.</div>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10097…794, 1ª série, escola 41086449. No regular (IFA LGG/CHS) desde 19/01; após 57 dias (17/03) passou ao técnico integrado na mesma escola. No SGP a antiga está "Transf. mesma rede" (etapa 25), encerrada em 17/03, certo. Mas a do técnico (etapa 30) só começa em 10/04: são 24 dias sem matrícula.</div>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10206…896, escola 41146093. Passou ao técnico após 73 dias (27/03). A nova está certa (etapa 30, em andamento desde 27/03), mas a antiga, do regular, está como "Aprovado" com fim em 18/12, como se ela tivesse cursado o ano inteiro no regular.</div>
       <dt>No SGP</dt><dd>A etapa muda (25 → 30), então: criar a nova na etapa do técnico, enturmar, enviar a frequência e encerrar a antiga com 2 na data do SERE.</dd>
       <dt>Regras</dt><dd>R05 · R06</dd>
     </dl>
@@ -324,7 +324,7 @@ flowchart LR
     <div class="fluxo-cab"><h3><span class="cod">B9</span>Reclassificação: muda de série no meio do ano</h3><span class="vol">188 alunos</span></div>
     <dl class="campos">
       <dt>No SERE</dt><dd>O aluno é reclassificado e passa para outra série na mesma escola. Mediana: 76 dias após a matrícula.</dd>
-      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10065…066, escola 41056957. Na 2ª série desde 13/01; após 87 dias (10/04) passou para a 3ª. No SGP a nova está certa (etapa 27, em andamento), mas a antiga foi marcada "Informação Incorreta", o que apagou a frequência de fevereiro a abril.</div>
+      <div class="exemplo" style="grid-column:1/-1">Exemplo real: CGM 10020…541, escola 41004590. Na 1ª série desde 13/01; reclassificada para a 2ª em 16/03. No SGP a matrícula da 1ª série foi anulada como "Informação Incorreta", e a da 2ª série tem início em 13/01, antes da reclassificação. Para o SGP ela sempre esteve na 2ª série.</div>
       <dt>No SGP</dt><dd>Criar a nova na série nova e encerrar a antiga com 9 (Reclassificação), não com 1.</dd>
       <dt>Regras</dt><dd>R05 · R06 · R07</dd>
     </dl>
@@ -525,7 +525,7 @@ flowchart LR
 
 <section class="secao assin" id="termo">
   <h2><span class="n">10</span>Termo de ciência</h2>
-  <p>Declaramos ter lido e compreendido as regras R01 a R15, o de-para da seção 2 e os fluxos A1 a E4 deste documento (versão 1.0, 05/11/2026). Os pontos da seção 9 serão decididos e registrados em nova versão.</p>
+  <p>Declaramos ter lido e compreendido as regras R01 a R15, o de-para da seção 2 e os fluxos A1 a E4 deste documento (versão 1.1, 05/11/2026). Os pontos da seção 9 serão decididos e registrados em nova versão.</p>
   <div class="tabela"><table>
     <thead><tr><th style="width:30%">Nome</th><th style="width:28%">Setor / função</th><th style="width:28%">Assinatura</th><th>Data</th></tr></thead>
     <tbody>
